@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: python /code/manage.py runserver 0.0.0.0:8000
+    environment:
+      - SECRET_KEY=new_django_secret_key
+      - DEBUG=1
+      - DEFAULT_FROM_EMAIL=webmaster@test.com
+      - EMAIL_HOST=mail.test.com
+      - EMAIL_HOST_USER=test
+      - EMAIL_HOST_PASSWORD=test_password
+      - EMAIL_PORT=25
+      - EMAIL_USE_TLS=False
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+      
+  db:
+    image: postgres:11
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+volumes:
+  postgres_data:
